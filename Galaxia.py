@@ -11,3 +11,4 @@ nave = pilas.actores.Nave()
 
 #Creando los asteroides
 enemigos = pilas.actores.Piedra() * 10
+nave.definir.enemigos(enemigos)
