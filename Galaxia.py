@@ -7,8 +7,10 @@ import random
 pilas = pilasengine.iniciar()
 
 #Creando la nave
-nave = pilas.actores.Nave()
+nave = pilas.actores.Nave(0, -180)
 
 #Creando los asteroides
-enemigos = pilas.actores.Piedra() * 10
-nave.definir.enemigos(enemigos)
+enemigos = pilas.actores.Piedra()*8
+nave.definir_enemigos(enemigos)
+
+pilas.ejecutar()
