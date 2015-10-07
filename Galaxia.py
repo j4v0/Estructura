@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# Explosión de Galaxias
+# Juego Creador por Javier Schunk
+# Año 2015
+
 import pilasengine
 import random
 
@@ -12,7 +16,7 @@ pilas = pilasengine.iniciar()
 class Bienvenida(pilasengine.escenas.Escena):
 	pilas.fondos.Noche()
 	pilas.actores.Texto("EXPLOSION GALACTICA", 
-						magnitud=40, fuente="visitor1.ttf", y=90)	
+						magnitud=40, fuente="visitor1.ttf", y=80)	
 	
 	def iniciar_juego():
 		print "Tengo que iniciar el juego"
@@ -30,16 +34,19 @@ class Bienvenida(pilasengine.escenas.Escena):
 		])
 		
 class Escena1(pilasengine.escenas.Escena):
+	
 	def iniciar(self):
 		self.pilas.fondos.Galaxia()
+		pilas.avisar("Pulsa las teclas de direccion  y espacio para disparar.")
 	#Creando la nave
 		self.nave = pilas.actores.Nave(0, -100)
 			
 	#Creando los asteroides
-	
-	def asteroides():	
-		self.enemigos = pilas.actores.Piedra()*12
-		self.nave.definir_enemigos(enemigos)
+		self.enemigos = pilas.actores.Piedra()*15
+		self.nave.definir_enemigos(self.enemigos)
+		pilas.colisiones.agregar(self.nave, self.enemigos, self.nave.eliminar)
+		self.nave.aprender(pilas.habilidades.LimitadoABordesDePantalla)
+		self.pilas.actores.Sonido()
 		
 pilas.escenas.vincular(Bienvenida)
 pilas.escenas.vincular(Escena1)
