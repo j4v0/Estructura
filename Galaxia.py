@@ -32,21 +32,17 @@ class Bienvenida(pilasengine.escenas.Escena):
 class Escena1(pilasengine.escenas.Escena):
 	def iniciar(self):
 		self.pilas.fondos.Galaxia()
-		#Creando la nave
+	#Creando la nave
 		self.nave = pilas.actores.Nave(0, -100)
-		self.puntos = pilas.actores.Puntaje(x=230, y=200,
-                                            color=pilas.colores.amarillo)
-		self.pilas.actores.Sonido()
-		nave.aprender(pilas.habilidades.LimitadoABordesDePantalla)
-		nave.definir_enemigos(enemigos, puntaje.aumentar)
-		pilas.colisiones.agregar(nave, enemigos, nave.eliminar)
-		#Creando los asteroides
-		enemigos = pilas.actores.Piedra()*12
-		nave.definir_enemigos(enemigos)
+			
+	#Creando los asteroides
+	
+	def asteroides():	
+		self.enemigos = pilas.actores.Piedra()*12
+		self.nave.definir_enemigos(enemigos)
 		
 pilas.escenas.vincular(Bienvenida)
 pilas.escenas.vincular(Escena1)
-pilas.escenas.vincular(EscenaFin)
 pilas.escenas.Bienvenida
 
 
