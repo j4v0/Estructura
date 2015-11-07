@@ -61,11 +61,11 @@ class Escena1(pilasengine.escenas.Escena):
         self.puntos = pilas.actores.Puntaje(x=-280, y=200,
                                             color=pilas.colores.rojo)
         estrellas = []
-            
+
     #Creando la nave
         self.nave = pilas.actores.Nave(0, 0)
         self.nave.aprender(pilas.habilidades.LimitadoABordesDePantalla)
-        self.nave.etiquetas.agregar("pis")
+        
         
    
     #Creando los asteroides
@@ -99,14 +99,16 @@ class Escena1(pilasengine.escenas.Escena):
             e.y = y
             estrellas.append(e)
             
-        #self.estrellas.etiquetas.agregar("caca")
+
         self.estrellas.aprender(pilas.habilidades.LimitadoABordesDePantalla)    
         pilas.colisiones.agregar(self.nave, self.estrellas, self.cuando_toca_estrella)
         self.estrellas.aprender(pilas.habilidades.PuedeExplotarConHumo)
         self.nave.definir_enemigos(self.estrellas)
+        #pilas.colisiones.agregar(self., self.estrellas, self.cuando_rompe_estrella)
+        self.nave.habilidades.Disparar.definir_colision(self.estrellas, self.cuando_rompe_estrella)
         self.nave.definir_enemigos(self.enemigos, self.puntos.aumentar)
         self.enemigos.aprender(pilas.habilidades.LimitadoABordesDePantalla)
-        pilas.colisiones.agregar(self.nave, self.enemigos, self._perder_)
+        pilas.colisiones.agregar(self.nave, self.enemigos, self.perder)
         self.pilas.actores.Sonido()
         self.enemigos.aprender(pilas.habilidades.PuedeExplotar)
        
@@ -116,11 +118,21 @@ class Escena1(pilasengine.escenas.Escena):
         self.puntos.escala = 0
         pilas.utils.interpolar(self.puntos, 'escala', 1, duracion=0.5)
         self.puntos.aumentar(10)
+        self.sound_bonus = pilas.sonidos.cargar('saltar.wav')
+        self.sound_bonus.reproducir()
         estrella.eliminar()
-        
+    
+    def cuando_rompe_estrella(self, nave, estrella):
+        self.puntos.escala = 0
+        pilas.utils.interpolar(self.puntos, 'escala', 1, duracion=0.5)
+        self.puntos.aumentar(-5)
+        self.sound_smile = pilas.sonidos.cargar('smile.wav')
+        self.sound_smile.reproducir()
+        estrella.eliminar()
+                
         
     
-    def _perder_(self):
+    def perder(self):
         self.pilas.tareas.eliminar_todas()
         self.nave.eliminar()
         self.pilas.escenas.EscenaFin(self.puntos.obtener())
