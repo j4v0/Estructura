@@ -143,7 +143,14 @@ class EscenaFin(pilasengine.escenas.Escena):
 
     def iniciar(self, puntaje):
         self.pilas.fondos.Noche()
-        mensaje = "Has perdido, Sumaste {} puntos.".format(puntaje)
+        if puntaje <=0:
+            mensaje = "Muy mal, has perdido, Sumaste {} puntos.".format(puntaje)
+        elif puntaje >1 and puntaje <=10:
+            mensaje = "Bien, Sumaste {} puntos.".format(puntaje)
+        else:
+            mensaje = "Muy bien, Sumaste {} puntos.".format(puntaje)
+            
+        
         
         self.texto = pilas.actores.Texto(mensaje)
         self.texto.y = 100
