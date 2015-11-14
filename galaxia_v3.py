@@ -15,8 +15,8 @@ class Bienvenida(pilasengine.escenas.Escena):
     #Escena de Bienvenida con el menu
     
     pilas.fondos.Noche()
-    pilas.actores.Texto("EXPLOSION \n GALACTICA", 
-                        magnitud=40, y=120)
+    pilas.actores.Texto("  EXPLOSION  \n  GALACTICA", 
+                        magnitud=45, y=120)
     pilas.avisar("Pulsa las teclas de direccion para elegir")
     
 
@@ -43,18 +43,26 @@ class Bienvenida(pilasengine.escenas.Escena):
 class Escena_ayuda(pilasengine.escenas.Escena):
     def iniciar (self):
         self.pilas.fondos.Noche()
-        mensaje = "BLA BLA BLA BLA BLA"
-        self.texto = pilas.actores.Texto(mensaje)
+        mensaje = """
+        Objetivo:
+        Destruir todos los asteroides 
+        antes de que se acabe el tiempo.
+        Agarrar las estrellas suma 5 puntos
+        pero cuidado, destruirlas los resta.
+        """
+        
+        self.texto = pilas.actores.Texto(mensaje); self.texto.color = pilas.colores.amarillo
         self.texto.y = 100
+        self.texto.x = -50
         
         pilas.actores.Menu(
             [
             ("Iniciar juego", pilas.escenas.Escena1),
         
             ])
-    
+        
 class Escena1(pilasengine.escenas.Escena):
-    #Escena 1 del juego 
+    #Escena 1 del juego
 
     def iniciar(self):
         self.pilas.fondos.Galaxia()
@@ -68,7 +76,7 @@ class Escena1(pilasengine.escenas.Escena):
         estrellas = []
         #piedras = []
         
-        self.tiempo = 15
+        self.tiempo = 20
         contador = pilas.actores.Texto("...")
         contador.x = 0
         contador.y = 200
@@ -80,13 +88,13 @@ class Escena1(pilasengine.escenas.Escena):
         
     # Si puede seguir jugando, reducimos el contador.
             if self.tiempo > 0:
-                contador.texto = str(self.tiempo) # tiempo es un numero, asi que lo tenemos que convertir a texto con str.
+                contador.texto = str(self.tiempo) # tiempo es un numero, asi que lo convierto a texto con str.
     
     # Si es tiempo de perder.
             if self.tiempo == 0:
-                pilas.escenas.Escena2()
+                pilas.escenas.Escena2(puntos.obtener())
                 
-        # le indicamos a pilas que llame a la funcion cada 1 segundo
+        #Llama a la funcion cada 1 segundo
         pilas.tareas.siempre(1, descontar_tiempo)   
         
         
@@ -109,8 +117,7 @@ class Escena1(pilasengine.escenas.Escena):
           
             i.x = x
             i.y = y
-            #piedras.append(i)
-        #self.piedras.empujar(1, 1)    
+  
 
     #Creando estrella
         self.estrellas = pilas.actores.Estrella()*4
@@ -129,7 +136,6 @@ class Escena1(pilasengine.escenas.Escena):
             estrellas.append(e)
         
         
-
         self.estrellas.aprender(pilas.habilidades.LimitadoABordesDePantalla)    
         pilas.colisiones.agregar(self.nave, self.estrellas, self.cuando_toca_estrella)
         self.estrellas.aprender(pilas.habilidades.PuedeExplotarConHumo)
@@ -161,49 +167,49 @@ class Escena1(pilasengine.escenas.Escena):
                 
         
     def perder(self):
+        puntos.eliminar()
         self.pilas.tareas.eliminar_todas()
         self.nave.eliminar()
         self.pilas.escenas.EscenaFin(puntos.obtener())
 
-   
+
+           
     
 class Escena2(pilasengine.escenas.Escena):
     #Escena 2 del juego
     
-    def iniciar(self):
+    def iniciar(self, puntaje):
         self.pilas.fondos.Galaxia()
         #pilas.avisar("Pulsa las teclas de direccion y espacio para disparar.")
         texto = pilas.actores.TextoInferior("NIVEL 2"); texto.color = pilas.colores.amarillo
-        puntos = pilas.actores.Puntaje(x=-280, y=200,
-                                                    color=pilas.colores.rojo)
+        global puntos
         
-        #global puntos2
+        """puntos1 = pilas.actores.Puntaje(x=-280, y=200,
+                                                    color=pilas.colores.rojo)"""
         
-     
-        
-        #puntos2 = puntos
+        puntos1 = puntos
         
         estrellas = []
         
-        self.tiempo = 15
+        self.tiempo = 20
         contador = pilas.actores.Texto("...")
         contador.x = 0
         contador.y = 200
         
-    # Función que decuenta el tiempo   
+    # Función que descuenta el tiempo   
         def descontar_tiempo():
            
             self.tiempo = self.tiempo - 1
         
     # Si puede seguir jugando, reducimos el contador.
             if self.tiempo > 0:
-                contador.texto = str(self.tiempo) # tiempo es un numero, asi que lo tenemos que convertir a texto con str.
+                contador.texto = str(self.tiempo) # iempo es un numero, asi que lo convierto a texto con str
     
     # Si el tiempo llega a 0
             if self.tiempo == 0:
-                pilas.escenas.EscenaFin()
+                pilas.escenas.EscenaFin(puntos.obtener())
                 
-        # le indicamos a pilas que llame a la funcion cada 1 segundo
+        # Llama a la funcion cada 1 segundo
         pilas.tareas.siempre(1, descontar_tiempo)   
         
         
@@ -279,6 +285,7 @@ class Escena2(pilasengine.escenas.Escena):
                 
         
     def perder(self):
+        puntos.eliminar()
         self.pilas.tareas.eliminar_todas()
         self.nave.eliminar()
         self.pilas.escenas.EscenaFin(puntos.obtener())
@@ -308,6 +315,7 @@ class EscenaFin(pilasengine.escenas.Escena):
             ])    
     
     def volver_juego(self):
+        puntos.eliminar()
         pilas.escenas.Escena1()
 
     def salir_del_juego(self):
