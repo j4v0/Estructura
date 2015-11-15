@@ -92,7 +92,7 @@ class Escena1(pilasengine.escenas.Escena):
     
     # Si es tiempo de perder.
             if self.tiempo == 0:
-                pilas.escenas.Escena2(puntos.obtener())
+                pilas.escenas.EscenaMedia()
                 
         #Llama a la funcion cada 1 segundo
         pilas.tareas.siempre(1, descontar_tiempo)   
@@ -172,7 +172,32 @@ class Escena1(pilasengine.escenas.Escena):
         self.nave.eliminar()
         self.pilas.escenas.EscenaFin(puntos.obtener())
 
-
+class EscenaMedia(pilasengine.escenas.Escena):
+    
+    def iniciar(self):
+        self.pilas.fondos.Noche()
+        pilas.actores.Texto("   El nivel 2 \n empieza en: ", 
+                        magnitud=30, y=120)
+        self.tiempo = 5
+        contador = pilas.actores.Texto("5", magnitud=30)
+        contador.x = 0
+        contador.y = 0
+        
+        def descontar_tiempo():
+           
+            self.tiempo = self.tiempo - 1
+        
+    # Si puede seguir jugando, reducimos el contador.
+            if self.tiempo > 0:
+                contador.texto = str(self.tiempo) # tiempo es un numero, asi que lo convierto a texto con str.
+    
+    # Si es tiempo de perder.
+            if self.tiempo == 0:
+                pilas.escenas.Escena2(puntos.obtener())
+                
+        #Llama a la funcion cada 1 segundo
+        pilas.tareas.siempre(1, descontar_tiempo) 
+        
            
     
 class Escena2(pilasengine.escenas.Escena):
@@ -329,6 +354,7 @@ class EscenaFin(pilasengine.escenas.Escena):
 pilas.escenas.vincular(Bienvenida)
 pilas.escenas.vincular(Escena_ayuda)
 pilas.escenas.vincular(Escena1)
+pilas.escenas.vincular(EscenaMedia)
 pilas.escenas.vincular(Escena2)
 pilas.escenas.vincular(EscenaFin)
 pilas.escenas.Bienvenida
