@@ -5,6 +5,8 @@
 # Juego Creado por Javier Schunk
 # Año 2015
 
+#Juego funcionando con Pilan Engine ver 1.2.0
+
 import pilasengine
 import random
 
@@ -55,6 +57,17 @@ class Escena_ayuda(pilasengine.escenas.Escena):
         self.texto.y = 100
         self.texto.x = -50
         
+        mensaje1 = """
+        Control:
+        La nave se mueve con las teclas 
+        de direccion y dispara con la 
+        barra espaciadora
+        """
+        
+        self.texto = pilas.actores.Texto(mensaje1); self.texto.color = pilas.colores.amarillo
+        self.texto.y = -140
+        self.texto.x = -60
+        
         pilas.actores.Menu(
             [
             ("Iniciar juego", pilas.escenas.Escena1),
@@ -74,8 +87,7 @@ class Escena1(pilasengine.escenas.Escena):
         global puntos
         
         estrellas = []
-        #piedras = []
-        
+                
         self.tiempo = 20
         contador = pilas.actores.Texto("...")
         contador.x = 0
@@ -86,7 +98,7 @@ class Escena1(pilasengine.escenas.Escena):
            
             self.tiempo = self.tiempo - 1
         
-    # Si puede seguir jugando, reducimos el contador.
+    # Si puede seguir jugando, se reduce el contador.
             if self.tiempo > 0:
                 contador.texto = str(self.tiempo) # tiempo es un numero, asi que lo convierto a texto con str.
     
@@ -187,7 +199,7 @@ class EscenaMedia(pilasengine.escenas.Escena):
            
             self.tiempo = self.tiempo - 1
         
-    # Si puede seguir jugando, reducimos el contador.
+    # Si puede seguir jugando, se reduce el contador.
             if self.tiempo > 0:
                 contador.texto = str(self.tiempo) # tiempo es un numero, asi que lo convierto a texto con str.
     
@@ -205,7 +217,6 @@ class Escena2(pilasengine.escenas.Escena):
     
     def iniciar(self, puntaje):
         self.pilas.fondos.Galaxia()
-        #pilas.avisar("Pulsa las teclas de direccion y espacio para disparar.")
         texto = pilas.actores.TextoInferior("NIVEL 2"); texto.color = pilas.colores.amarillo
         global puntos
         
@@ -226,9 +237,9 @@ class Escena2(pilasengine.escenas.Escena):
            
             self.tiempo = self.tiempo - 1
         
-    # Si puede seguir jugando, reducimos el contador.
+    # Si puede seguir jugando, se reduce el contador.
             if self.tiempo > 0:
-                contador.texto = str(self.tiempo) # iempo es un numero, asi que lo convierto a texto con str
+                contador.texto = str(self.tiempo) # tiempo es un numero, asi que lo convierto a texto con str
     
     # Si el tiempo llega a 0
             if self.tiempo == 0:
@@ -259,7 +270,7 @@ class Escena2(pilasengine.escenas.Escena):
             i.y = y
            
         
-        self.piedras.empujar(1, 1)    
+        self.piedras.empujar(1, 1)    #hago que las piedras se muevan
 
     #Creando estrella
         self.estrellas = pilas.actores.Estrella()*5
@@ -286,7 +297,6 @@ class Escena2(pilasengine.escenas.Escena):
         self.nave.habilidades.Disparar.definir_colision(self.estrellas, self.cuando_rompe_estrella)
         self.nave.definir_enemigos(self.piedras, puntos.aumentar)
         self.piedras.aprender(pilas.habilidades.PuedeExplotar)
-        #self.piedras.aprender(pilas.habilidades.LimitadoABordesDePantalla)
         pilas.colisiones.agregar(self.nave, self.piedras, self.perder)
         self.pilas.actores.Sonido()
 
